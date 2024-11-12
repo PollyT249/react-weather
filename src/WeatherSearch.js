@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "./WeatherSearch.css";
 
 export default function WeatherSearch() {
   const [city, setCity] = useState("");
@@ -9,6 +10,7 @@ export default function WeatherSearch() {
   function displayWeather(response) {
     setLoaded(true);
     setWeather({
+      city: response.data.name,
       temperature: response.data.main.temp,
       wind: response.data.wind.speed,
       humidity: response.data.main.humidity,
@@ -29,28 +31,72 @@ export default function WeatherSearch() {
   }
 
   let form = (
-    <form onSubmit={handleSubmit}>
-      <input type="search" placeholder="Enter a city.." onChange={updateCity} />
-      <button type="Submit">Search</button>
+    <form className="search-form" onSubmit={handleSubmit}>
+      <input
+        type="search"
+        placeHolder="Enter a city.."
+        required
+        className="search-form-input"
+        onChange={updateCity}
+      />
+      <button type="submit" className="search-form-button">
+        Search
+      </button>
     </form>
   );
 
   if (loaded) {
     return (
-      <div>
+      <div className="WeatherSearch">
         {form}
-        <ul>
-          <li>Temperature: {Math.round(weather.temperature)}°C</li>
-          <li>Description: {weather.description}</li>
-          <li>Humidity: {weather.humidity}%</li>
-          <li>Wind: {weather.wind}km/h</li>
-          <li>
-            <img src={weather.icon} alt={weather.description} />
-          </li>
-        </ul>
+
+        <div className="weather-app-data">
+          <div>
+            <h1 className="weather-app-city">{weather.city}</h1>
+            <p className="weather-app-details">
+              Humidity: <strong>{weather.humidity}%</strong>, Wind:
+              <strong>{Math.round(weather.wind)}km/h</strong>
+            </p>
+          </div>
+          <div className="weather-app-temperature-container">
+            <img
+              src={weather.icon}
+              alt={weather.description}
+              className="icon"
+            />
+            <div className="weater-app-temperature">
+              {Math.round(weather.temperature)}
+            </div>
+            <div className="weather-app-unit">℃</div>
+          </div>
+        </div>
+        <footer>
+          Built by Polina Tretiakova and open-sourced on{" "}
+          <a
+            href="https://github.com/PollyT249/react-weather"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub
+          </a>
+        </footer>
       </div>
     );
   } else {
-    return form;
+    return (
+      <div className="WeatherSearch">
+        {form}
+        <footer>
+          Built by Polina Tretiakova and open-sourced on{" "}
+          <a
+            href="https://github.com/PollyT249/react-weather"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub
+          </a>
+        </footer>
+      </div>
+    );
   }
 }
